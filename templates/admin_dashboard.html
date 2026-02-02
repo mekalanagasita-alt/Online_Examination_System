@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard - Online Examination System{% endblock %}
+{% block content %}
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div class="bg-white rounded-lg shadow p-6 flex flex-col items-center">
+        <i class="fas fa-file-alt text-3xl text-blue-600 mb-2"></i>
+        <div class="text-2xl font-bold">{{ stats.total_exams }}</div>
+        <div class="text-gray-500">Total Exams</div>
+    </div>
+    <div class="bg-white rounded-lg shadow p-6 flex flex-col items-center">
+        <i class="fas fa-users text-3xl text-green-600 mb-2"></i>
+        <div class="text-2xl font-bold">{{ stats.total_students }}</div>
+        <div class="text-gray-500">Total Students</div>
+    </div>
+    <div class="bg-white rounded-lg shadow p-6 flex flex-col items-center">
+        <i class="fas fa-check-circle text-3xl text-yellow-500 mb-2"></i>
+        <div class="text-2xl font-bold">{{ stats.active_exams }}</div>
+        <div class="text-gray-500">Active Exams</div>
+    </div>
+    <div class="bg-white rounded-lg shadow p-6 flex flex-col items-center">
+        <i class="fas fa-chart-bar text-3xl text-purple-600 mb-2"></i>
+        <div class="text-2xl font-bold">{{ stats.total_results }}</div>
+        <div class="text-gray-500">Total Results</div>
+    </div>
+</div>
+<div class="flex justify-between items-center mb-6">
+    <h2 class="text-2xl font-bold text-gray-800">Recent Exams</h2>
+    <a href="{{ url_for('create_exam') }}" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">Create Exam</a>
+</div>
+{% if recent_exams %}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for exam in recent_exams %}
+        <div class="bg-white rounded-lg shadow-lg p-6 card-hover flex flex-col justify-between">
+            <div>
+                <h3 class="text-xl font-semibold text-blue-700 mb-2">{{ exam.title }}</h3>
+                <p class="text-gray-600 mb-2">{{ exam.description }}</p>
+                <div class="flex items-center text-gray-500 text-sm mb-2">
+                    <i class="fas fa-clock mr-2"></i>Duration: {{ exam.duration }} min
+                </div>
+                <div class="flex items-center text-gray-500 text-sm mb-2">
+                    <i class="fas fa-calendar-alt mr-2"></i>Created: {{ exam.created_at.strftime('%Y-%m-%d') }}
+                </div>
+            </div>
+            <div class="mt-4 flex gap-2">
+                <a href="{{ url_for('admin_exams') }}" class="inline-block px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition text-xs">Manage</a>
+                <a href="{{ url_for('admin_results') }}" class="inline-block px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition text-xs">Results</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 my-4">
+        <p class="text-yellow-800">No recent exams found.</p>
+    </div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Exam Results - Online Examination System{% endblock %}
+{% block content %}
+<div class="max-w-3xl mx-auto bg-white rounded-lg shadow p-8">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-gray-800">Results for {{ exam.title }}</h2>
+        <span class="text-green-600 font-bold text-xl">Score: {{ result.score }}/{{ result.total_questions }}</span>
+    </div>
+    <div class="mb-6">
+        <div class="flex items-center gap-4">
+            <span class="text-lg font-semibold">Percentage:</span>
+            <span class="text-blue-700 font-bold">{{ result.percentage }}%</span>
+            <span class="text-gray-500">Time Taken: {{ result.time_taken }} seconds</span>
+        </div>
+    </div>
+    <div class="mb-8">
+        <h3 class="text-xl font-semibold mb-4">Question Review</h3>
+        <div class="space-y-6">
+            {% for q in detailed_results %}
+            <div class="p-4 rounded border {{ 'border-green-400 bg-green-50' if q.is_correct else 'border-red-400 bg-red-50' }}">
+                <div class="font-semibold mb-2">Q{{ loop.index }}: {{ q.question }}</div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {% for opt in q.options %}
+                    <div class="flex items-center gap-2">
+                        <span class="inline-block w-4 h-4 rounded-full {{ 'bg-green-500' if loop.index0==q.correct_answer else 'bg-gray-200' }}"></span>
+                        <span class="{{ 'font-bold text-green-700' if loop.index0==q.correct_answer else '' }}">{{ opt }}</span>
+                        {% if loop.index0==q.user_answer %}
+                            <span class="ml-2 px-2 py-0.5 rounded text-xs {{ 'bg-green-200 text-green-800' if q.is_correct else 'bg-red-200 text-red-800' }}">Your Answer</span>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="mt-8 flex justify-end">
+        <a href="{{ url_for('dashboard') }}" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">Back to Dashboard</a>
+    </div>
+</div>
+{% endblock %}
